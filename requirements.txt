@@ -1,0 +1,6 @@
+fastapi[standard]
+torch
+numpy 
+pandas
+nltk
+
