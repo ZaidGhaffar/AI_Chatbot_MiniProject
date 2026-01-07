@@ -2,20 +2,156 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chatbot App</title>
+    <title>ZAY‑G • AI Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
 </head>
 <body>
+<div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar__brand">
+            <div class="brand-logo">Z</div>
+            <div class="brand-text">
+                <span class="brand-name">ZAY‑G</span>
+                <span class="brand-tagline">Digital Copilot</span>
+            </div>
+        </div>
 
-<div class="chat-container">
-    <h2>🤖 My Chatbot</h2>
+        <div class="sidebar__search">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="Search conversations" disabled>
+        </div>
 
-    <div id="chat-box"></div>
+        <nav class="sidebar__nav">
+            <button class="nav-item active">
+                <span class="icon">💬</span>
+                <span>New Chat</span>
+            </button>
+            <button class="nav-item">
+                <span class="icon">📚</span>
+                <span>Library</span>
+            </button>
+            <button class="nav-item">
+                <span class="icon">⭐</span>
+                <span>My Favorites</span>
+            </button>
+            <button class="nav-item">
+                <span class="icon">📁</span>
+                <span>Projects</span>
+            </button>
+        </nav>
 
-    <div class="input-area">
-        <input type="text" id="user-input" placeholder="Type a message..." />
-        <button onclick="sendMessage()">Send</button>
-    </div>
+        <div class="sidebar__history">
+            <h3>Recent</h3>
+            <button class="history-item">Fitness plan with Trainer</button>
+            <button class="history-item">Budget & expenses</button>
+            <button class="history-item">Travel ideas for summer</button>
+            <button class="history-item">Brainstorm app concept</button>
+        </div>
+
+        <div class="sidebar__footer">
+            <div class="profile-pill">
+                <div class="avatar">ZG</div>
+                <div class="profile-text">
+                    <span class="profile-name">Zaid</span>
+                    <span class="profile-status">Always learning ✨</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+        <header class="main__header">
+            <div class="header-left">
+                <h1>How can I help you today?</h1>
+                <p class="header-subtitle">
+                    Ask anything — from brainstorming ideas to planning your next big project.
+                </p>
+            </div>
+            <div class="header-right">
+                <button class="chip primary">✨ Smart suggestions</button>
+                <button class="chip">💡 Inspiration</button>
+                <button class="chip">📊 Productivity</button>
+            </div>
+        </header>
+
+        <section class="main__content">
+            <div class="hero">
+                <div class="hero-visual">
+                    <div class="hero-gradient"></div>
+                    <img
+                        src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80"
+                        alt="Friendly AI assistant"
+                        class="hero-image"
+                        loading="lazy"
+                    />
+                    <div class="hero-orbit hero-orbit--top">⚡ Quick tips</div>
+                    <div class="hero-orbit hero-orbit--bottom">💭 New ideas</div>
+                </div>
+                <div class="hero-cards">
+                    <div class="suggestion-card">
+                        <span class="chip chip-soft">Finance &amp; Budget</span>
+                        <p>“Create a monthly budget for a student living in a new city.”</p>
+                    </div>
+                    <div class="suggestion-card">
+                        <span class="chip chip-soft">Career &amp; Growth</span>
+                        <p>“Help me prepare for a frontend developer interview.”</p>
+                    </div>
+                    <div class="suggestion-card">
+                        <span class="chip chip-soft">Lifestyle</span>
+                        <p>“Plan a 3‑day weekend trip with friends.”</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat panel -->
+            <section class="chat-panel" aria-label="AI chat">
+                <div class="chat-panel__header">
+                    <div class="chat-avatar">
+                        <img
+                            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80"
+                            alt="ZAY‑G avatar"
+                            loading="lazy"
+                        />
+                    </div>
+                    <div>
+                        <div class="chat-title">ZAY‑G Digital</div>
+                        <div class="chat-status">
+                            <span class="status-dot"></span>
+                            Online • Ready to help
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chat-box" class="chat-panel__messages" aria-live="polite"></div>
+
+                <form class="chat-panel__input" onsubmit="handleSubmit(event)">
+                    <div class="chat-input-wrapper">
+                        <textarea
+                            id="user-input"
+                            rows="1"
+                            placeholder="Ask anything…"
+                            autocomplete="off"
+                        ></textarea>
+                        <button
+                            type="button"
+                            class="chat-input__icon-btn"
+                            aria-label="Insert emoji"
+                        >😊</button>
+                    </div>
+                    <button type="submit" class="btn-send">
+                        <span>Send</span>
+                        <span class="btn-send__icon">➤</span>
+                    </button>
+                </form>
+            </section>
+        </section>
+    </main>
 </div>
 
 <script>
@@ -26,6 +162,7 @@ async function sendMessage() {
 
     addMessage("You", message);
     input.value = "";
+    input.style.height = "44px";
 
     try {
         const response = await fetch("{{ request.url_for('chat') }}", {
@@ -43,11 +180,45 @@ async function sendMessage() {
 
 function addMessage(sender, text) {
     const chatBox = document.getElementById("chat-box");
-    const msg = document.createElement("div");
-    msg.className = sender === "You" ? "user-msg" : "bot-msg";
-    msg.innerText = `${sender}: ${text}`;
-    chatBox.appendChild(msg);
+    const msgWrapper = document.createElement("div");
+    msgWrapper.className = sender === "You" ? "message-row message-row--user" : "message-row message-row--bot";
+
+    const bubble = document.createElement("div");
+    bubble.className = sender === "You" ? "message-bubble message-bubble--user" : "message-bubble message-bubble--bot";
+
+    const label = document.createElement("div");
+    label.className = "message-label";
+    label.textContent = sender === "You" ? "You" : "ZAY‑G";
+
+    const body = document.createElement("div");
+    body.className = "message-text";
+    body.textContent = text;
+
+    bubble.appendChild(label);
+    bubble.appendChild(body);
+    msgWrapper.appendChild(bubble);
+    chatBox.appendChild(msgWrapper);
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function handleSubmit(event) {
+    event.preventDefault();
+    sendMessage();
+}
+
+// Auto‑resize textarea on input
+const inputEl = document.getElementById("user-input");
+if (inputEl) {
+    inputEl.addEventListener("input", () => {
+        inputEl.style.height = "auto";
+        inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
+    });
+    inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
 }
 </script>
 
